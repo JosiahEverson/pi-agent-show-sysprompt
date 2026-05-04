@@ -72,7 +72,16 @@ export default function showSyspromptExtension(pi: ExtensionAPI) {
 		return formatCollapsibleMessage("Available tools", schemas, expanded, theme)
 	})
 
-	pi.on("session_start", (event, ctx) => {
+	let shown = false
+
+	pi.on("session_start", () => {
+		shown = false
+	})
+
+	pi.on("agent_start", (_event, ctx) => {
+		if (shown) return
+		shown = true
+
 		const prompt = ctx.getSystemPrompt()
 		const activeTools = new Set(pi.getActiveTools())
 		const toolSchemas = formatToolSchemas(pi.getAllTools().filter(tool => activeTools.has(tool.name)))
@@ -80,14 +89,12 @@ export default function showSyspromptExtension(pi: ExtensionAPI) {
 		pi.sendMessage({
 			customType: SYSTEM_PROMPT_MESSAGE_TYPE,
 			content: prompt,
-			display: true,
-			details: { reason: event.reason }
+			display: true
 		})
 		pi.sendMessage({
 			customType: TOOL_SCHEMAS_MESSAGE_TYPE,
 			content: toolSchemas,
-			display: true,
-			details: { reason: event.reason }
+			display: true
 		})
 	})
 
