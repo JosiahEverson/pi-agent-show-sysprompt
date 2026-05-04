@@ -1,15 +1,20 @@
 {
 	"name": "@xl0/show-sysprompt",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"keywords": [
 		"pi-package"
 	],
 	"type": "module",
 	"license": "MIT",
-	"files": ["extensions/", "README.md", "LICENSE"],
+	"files": [
+		"extensions/",
+		"README.md",
+		"LICENSE"
+	],
 	"scripts": {
 		"typecheck": "tsgo --noEmit",
 		"check": "bun run typecheck && bun run biome:check",
+		"publish": "bun publish --access public",
 		"lint": "biome lint .",
 		"format": "biome format --write .",
 		"format:check": "biome format .",
