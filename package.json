@@ -1,11 +1,16 @@
 {
 	"name": "@xl0/show-sysprompt",
-	"version": "0.1.2",
+	"version": "0.1.4",
 	"keywords": [
 		"pi-package"
 	],
 	"type": "module",
 	"license": "MIT",
+	"homepage": "https://github.com/xl0/pi-agent-show-sysprompt#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/xl0/pi-agent-show-sysprompt.git"
+	},
 	"files": [
 		"extensions/",
 		"README.md",

@@ -11,7 +11,7 @@ pi install npm:@xl0/show-sysprompt
 ```
 (`-l` for local install into the current dir)
 
-<img src="https://raw.githubusercontent.com/xl0/pi-agent-show-sysprompt/master/screenshot.png" alt="Screenshot" width="75%">
+![Screenshot](https://raw.githubusercontent.com/xl0/pi-agent-show-sysprompt/master/screenshot.png)
 
 
 Or load without installing:
