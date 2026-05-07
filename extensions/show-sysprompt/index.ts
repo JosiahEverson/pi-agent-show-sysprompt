@@ -72,30 +72,30 @@ export default function showSyspromptExtension(pi: ExtensionAPI) {
 		return formatCollapsibleMessage("Available tools", schemas, expanded, theme)
 	})
 
-	let shown = false
-
-	pi.on("session_start", () => {
-		shown = false
-	})
-
 	pi.on("agent_start", (_event, ctx) => {
-		if (shown) return
-		shown = true
+		const shownMessageTypes = new Set(
+			ctx.sessionManager
+				.getBranch()
+				.filter(entry => entry.type === "custom_message" && "customType" in entry && HIDDEN_MESSAGE_TYPES.has(entry.customType))
+				.map(entry => ("customType" in entry ? entry.customType : ""))
+		)
 
-		const prompt = ctx.getSystemPrompt()
-		const activeTools = new Set(pi.getActiveTools())
-		const toolSchemas = formatToolSchemas(pi.getAllTools().filter(tool => activeTools.has(tool.name)))
+		if (!shownMessageTypes.has(SYSTEM_PROMPT_MESSAGE_TYPE)) {
+			pi.sendMessage({
+				customType: SYSTEM_PROMPT_MESSAGE_TYPE,
+				content: ctx.getSystemPrompt(),
+				display: true
+			})
+		}
 
-		pi.sendMessage({
-			customType: SYSTEM_PROMPT_MESSAGE_TYPE,
-			content: prompt,
-			display: true
-		})
-		pi.sendMessage({
-			customType: TOOL_SCHEMAS_MESSAGE_TYPE,
-			content: toolSchemas,
-			display: true
-		})
+		if (!shownMessageTypes.has(TOOL_SCHEMAS_MESSAGE_TYPE)) {
+			const activeTools = new Set(pi.getActiveTools())
+			pi.sendMessage({
+				customType: TOOL_SCHEMAS_MESSAGE_TYPE,
+				content: formatToolSchemas(pi.getAllTools().filter(tool => activeTools.has(tool.name))),
+				display: true
+			})
+		}
 	})
 
 	pi.on("session_before_tree", (event, ctx) => {
